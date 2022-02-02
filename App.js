@@ -18,6 +18,8 @@ import {
   ToastAndroid,
   Modal,
   Pressable,
+  Image,
+  ImageBackground,
 } from 'react-native';
 
 import {
@@ -27,6 +29,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import MashButton from './CustomButton';
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -147,7 +150,11 @@ const App: () => Node = () => {
   };
 
   return (
-    <View style={styles.body}>
+    <ImageBackground
+      style={styles.body}
+      source={{
+        uri: 'https://cdn.pixabay.com/photo/2013/07/12/12/35/texture-145968_960_720.png',
+      }}>
       <Modal
         visible={showWarning}
         onRequestClose={() => SetShowWarning(false)}
@@ -164,6 +171,7 @@ const App: () => Node = () => {
                 The name must be longer than 3 characters
               </Text>
             </View>
+
             <Pressable
               onPress={() => SetShowWarning(false)}
               style={styles.warning_button}
@@ -180,13 +188,28 @@ const App: () => Node = () => {
         placeholder="e.g. John"
         onChangeText={value => setName(value)}
       />
+      <MashButton
+        onPressFunction={onPressHandler}
+        title={submitted ? 'Clear' : 'Submit'}
+        color={'#00ff00'}
+      />
+      <MashButton
+        onPressFunction={onPressHandler}
+        title={'Test'}
+        color={'#ff00ff'}
+      />
       <Button
         title={submitted ? 'Clear' : 'Submit'}
         onPress={onPressHandler}
         color="#00f"></Button>
       {submitted ? (
-        <Text style={styles.text}>You are registered as {name}</Text>
-      ) : null}
+        <View style={styles.body}>
+          <Text style={styles.text}>You are registered as {name}</Text>
+          <Image style={styles.image} source={require('./assets/done.png')} />
+        </View>
+      ) : (
+        <Image style={styles.image} source={require('./assets/error.png')} />
+      )}
 
       {/* <SectionList
         keyExtractor={(item, index) => index.toString()}
@@ -281,7 +304,7 @@ const App: () => Node = () => {
         onPress={() => {
           Linking.openURL('https://www.google.com');
         }}></Button> */}
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -331,6 +354,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#00ffff',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
+  },
+  image: {
+    height: 100,
+    width: 100,
+    margin: 10,
   },
   item: {
     margin: 10,
